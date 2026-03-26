@@ -1,0 +1,14 @@
+{
+    "<html>":   "<iflytek_html_html_s>",
+    "<table>":  "<iflytek_html_table_s>",
+    "<tr>":     "<iflytek_html_tr_s>",
+    "<thead>":  "<iflytek_html_thead_s>",
+    "<tbody>":  "<iflytek_html_tbody_s>",
+    "</html>":  "<iflytek_html_html_e>",
+    "</table>": "<iflytek_html_table_e>",
+    "</tr>":    "<iflytek_html_tr_e>",
+    "</thead>": "<iflytek_html_thead_e>",
+    "</tbody>": "<iflytek_html_tbody_e>",
+    "<td>":     "<iflytek_html_td_s>",
+    "</td>":    "<iflytek_html_td_e>"
+}

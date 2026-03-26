@@ -1,0 +1,138 @@
+# @package _global_
+
+common:
+  fp16: true
+  memory_efficient_fp16: false
+  amp: false
+  fp16_no_flatten_grads: true
+  layernorm_fp32: true
+
+  cudnn_benchmark: false
+  cudnn_deterministic: false
+
+  log_format: json
+  log_interval: 20
+  tensorboard_logdir: tb
+
+task:
+  _name: minigpt4
+  seq_length: 8192
+  seed: 1234
+  use_ocr_plug: false
+
+model_parallel:
+  num_micro_batch: 1
+  micro_batch_size: 1
+  pipeline_model_parallel_size: 1
+  tensor_model_parallel_size: 1
+  use_cpu_initialization: False
+  sequence_parallel: False
+  recompute_granularity: full
+
+distributed_training:
+  ddp_backend: pytorch_ddp
+  zero_sharding: os_v2
+
+model:
+  _name: model_parallel_mmu
+  freeze_vit: true
+  freeze_qformer: false
+  freeze_bbox_embed: true
+  vit_precision: fp16
+
+  num_query_token: 2048 #2048 #1024 #
+  image_size: 1024
+  vit_model: eva_clip_g
+  qformer_name: resampler-base  # bert-base-uncased | bert-base-multilingual-cased
+  q_former_model: null
+  ckpt: null
+
+  ibos_token: "<Img>"    # used
+  ieos_token: "</Img>"    # used
+
+  lora:
+    apply_lora: false
+    only_train_lora: false
+    lora_rank: 20 #20
+    lora_alpha: 256
+    lora_dropout: 0.0
+    adapt_q: true
+    adapt_k: true
+    adapt_v: true
+    adapt_o: true
+    adapt_fc1: true
+    adapt_fc2: true
+    merge_weights: false
+
+  # ipt 1.3B config
+  embed_dim: 2048
+  mlp_embed_dim: 11264
+  num_layers: 6
+  normalize_before: true
+  num_heads: 32
+  padded_vocab_size: 60000 #60000
+  max_position_embeddings: 6144
+  attention_dropout_p: 0.0
+  hidden_dropout_p: 0.0
+  layernorm_epsilon: 1e-5
+  init_method_std: 0.0221
+  apply_query_key_layer_scaling: false
+  attention_softmax_in_fp32: false
+  scaled_masked_softmax_fusion: false
+  scaled_upper_triang_masked_softmax_fusion: false
+  apply_residual_connection_post_layernorm: false
+  bias_dropout_fusion: true
+  from_pretrained: null
+  parallel_output: true
+  cross_flash_attn: true
+  position_type: rope
+  gate_gelu: true
+  use_flash: true
+  use_sparse: true
+  sparse_local_size: 2048
+  use_naiive: true
+  end_sym: <iflytek_end>    # deprecation, using eos_token instead
+
+
+  CFGI_CFG:
+    embed_dim: 2048
+    mlp_embed_dim: 11264
+    num_layers: 2
+    normalize_before: true
+    num_heads: 32
+    padded_vocab_size: 60000 #60000
+    max_position_embeddings: 6144
+    attention_dropout_p: 0.0
+    hidden_dropout_p: 0.0
+    layernorm_epsilon: 1e-5
+    init_method_std: 0.0221
+    apply_query_key_layer_scaling: false
+    attention_softmax_in_fp32: false
+    scaled_masked_softmax_fusion: false
+    scaled_upper_triang_masked_softmax_fusion: false
+    apply_residual_connection_post_layernorm: false
+    bias_dropout_fusion: true
+    parallel_output: true
+    cross_flash_attn: true
+    position_type: null # 不需要再解码的时候关注位置，而是编码logical位置
+    gate_gelu: true
+    use_flash: true
+    use_sparse: false
+    sparse_local_size: 2048
+    use_naiive: true
+    end_sym: <iflytek_end>    # deprecation, using eos_token instead
+    logical_position_type: rope
+    cfgi_rope: true
+
+
+tokenizer:
+  _name: bbox_tokenizer_minigpt4
+  vocab_file: TDATR/tokenizers/tokenizer
+
+generation:
+  max_len: 4096
+  temperature: 0.5
+  sampling_topp: 0.0
+  sampling_topk: 1
+  no_repeat_ngram_size: 15
+  prompt_path: None
