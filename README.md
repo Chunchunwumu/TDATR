@@ -3,7 +3,7 @@
 
 [](https://www.google.com/search?q=%23) [](https://www.google.com/search?q=%23)
 
-Official PyTorch implementation and pre-trained weights for the paper **"TDATR: Improving End-to-End Table Recognition via Table Detail-Aware Learning and Cell-Level Visual Alignment"**.
+Official PyTorch implementation and pre-trained weights for the CVPR2026 paper **["TDATR: Improving End-to-End Table Recognition via Table Detail-Aware Learning and Cell-Level Visual Alignment"](https://arxiv.org/abs/2603.22819v1)**.
 
 ## 📖 Introduction
 
